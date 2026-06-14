@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mark.dev — Fullstack Developer</title>
+  <meta name="description" content="Марк — 19-летний fullstack-разработчик. React, Next.js, Node.js, TypeScript." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <header class="nav" id="nav">
+    <a href="#hero" class="nav__logo">mark.dev</a>
+    <nav class="nav__links">
+      <a href="#hero" class="nav__link active">Home</a>
+      <a href="#about" class="nav__link">About</a>
+      <a href="#portfolio" class="nav__link">Portfolio</a>
+      <a href="#contact" class="nav__link">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero" id="hero">
+    <div class="hero__grid">
+      <!-- Left: content -->
+      <div class="hero__content">
+        <span class="hero__status">
+          <span class="hero__dot"></span>
+          AVAILABLE FOR WORK
+        </span>
+
+        <h1 class="hero__title">
+          <span class="hero__title-line">Fullstack</span>
+          <span class="hero__title-line">Developer</span>
+        </h1>
+
+        <p class="hero__subtitle">
+          <span id="typed-role">Junior Programmer</span><span class="cursor">_</span>
+        </p>
+
+        <p class="hero__desc">
+          Создаю современные веб-приложения с чистым,
+          отзывчивым и элегантным дизайном. Превращаю идеи
+          в цифровой опыт, который запоминается.
+        </p>
+
+        <div class="hero__tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag">React.js</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">Node.js</span>
+        </div>
+
+        <div class="hero__actions">
+          <a href="#portfolio" class="hero__link">↓ explore my work below</a>
+          <a href="#contact" class="hero__link hero__link--alt">→ available about hiring</a>
+        </div>
+      </div>
+
+      <!-- Right: 3D badge -->
+      <div class="hero__visual" id="hero-visual">
+        <!-- Stars burst on load -->
+        <div class="stars-burst" id="stars-burst"></div>
+
+        <!-- Decorative wireframe cube -->
+        <div class="cube" id="cube">
+          <div class="cube__face cube__face--front"></div>
+          <div class="cube__face cube__face--back"></div>
+          <div class="cube__face cube__face--left"></div>
+          <div class="cube__face cube__face--right"></div>
+          <div class="cube__face cube__face--top"></div>
+          <div class="cube__face cube__face--bottom"></div>
+        </div>
+
+        <!-- ID Badge -->
+        <div class="badge" id="badge">
+          <div class="badge__string"></div>
+          <div class="badge__clip">
+            <div class="badge__clip-ring"></div>
+          </div>
+          <div class="badge__card">
+            <span class="badge__label">ID CARD</span>
+            <div class="badge__photo">
+              <span class="badge__photo-default">M</span>
+              <span class="badge__photo-hover">(◕‿◕)</span>
+            </div>
+            <div class="badge__info">
+              <span class="badge__name">Марк</span>
+              <span class="badge__role">Fullstack Dev</span>
+            </div>
+            <div class="badge__barcode">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative grid lines -->
+    <div class="hero__gridlines"></div>
+  </section>
+
+  <!-- ─── ABOUT ─── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-label reveal">01 / about</div>
+      <div class="about__grid">
+        <div class="about__text reveal">
+          <h2 class="section-title">Кто я такой</h2>
+          <p>
+            Мне 19 лет. Я fullstack-разработчик с фокусом на построении
+            быстрых, масштабируемых веб-приложений. Работаю с React и Next.js
+            на фронте, Node.js и Express на бэке.
+          </p>
+          <p>
+            Люблю чистый код, продуманную архитектуру и пиксельную точность
+            в реализации дизайнов. Всегда ищу баланс между функциональностью
+            и эстетикой.
+          </p>
+        </div>
+        <div class="about__stats reveal">
+          <div class="stat-card">
+            <span class="stat-card__number" data-count="19">0</span>
+            <span class="stat-card__label">лет</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" data-count="15">0</span>
+            <span class="stat-card__label">проектов</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" data-count="2">0</span>
+            <span class="stat-card__label">года опыта</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" data-count="8">0</span>
+            <span class="stat-card__label">технологий</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PORTFOLIO ─── -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <div class="section-label reveal">02 / portfolio</div>
+      <h2 class="section-title section-title--center reveal">Portfolio Showcase</h2>
+      <p class="section-sub reveal">Explore my journey through projects, certifications, and technical expertise.</p>
+
+      <div class="tabs reveal" id="tabs">
+        <button class="tab active" data-tab="projects">Projects</button>
+        <button class="tab" data-tab="certificates">Certificates</button>
+        <button class="tab" data-tab="stack">Tech Stack</button>
+      </div>
+
+      <!-- Projects tab -->
+      <div class="tab-content active" id="tab-projects">
+        <div class="projects-grid">
+          <div class="project-card reveal" data-tilt>
+            <div class="project-card__preview">
+              <div class="project-card__mockup">
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <div class="project-card__screen">
+                  <div class="mock-line" style="width:60%"></div>
+                  <div class="mock-line" style="width:80%"></div>
+                  <div class="mock-line" style="width:45%"></div>
+                  <div class="mock-block"></div>
+                  <div class="mock-line" style="width:70%"></div>
+                </div>
+              </div>
+            </div>
+            <h3 class="project-card__title">E-Commerce Platform</h3>
+            <p class="project-card__desc">Полноценный интернет-магазин с корзиной, оплатой, админ-панелью и системой управления заказами.</p>
+            <div class="project-card__tags">
+              <span>Next.js</span>
+              <span>Prisma</span>
+              <span>Stripe</span>
+            </div>
+            <div class="project-card__footer">
+              <a href="#" class="project-card__link">Live Demo →</a>
+              <a href="#" class="project-card__link">GitHub</a>
+            </div>
+          </div>
+
+          <div class="project-card reveal" data-tilt>
+            <div class="project-card__preview">
+              <div class="project-card__mockup">
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <div class="project-card__screen">
+                  <div class="mock-block" style="height:40px"></div>
+                  <div class="mock-line" style="width:55%"></div>
+                  <div class="mock-line" style="width:90%"></div>
+                  <div class="mock-line" style="width:35%"></div>
+                </div>
+              </div>
+            </div>
+            <h3 class="project-card__title">Task Manager App</h3>
+            <p class="project-card__desc">Kanban-доска с drag & drop, командной работой в реальном времени и аналитикой продуктивности.</p>
+            <div class="project-card__tags">
+              <span>React</span>
+              <span>Socket.io</span>
+              <span>MongoDB</span>
+            </div>
+            <div class="project-card__footer">
+              <a href="#" class="project-card__link">Live Demo →</a>
+              <a href="#" class="project-card__link">GitHub</a>
+            </div>
+          </div>
+
+          <div class="project-card reveal" data-tilt>
+            <div class="project-card__preview">
+              <div class="project-card__mockup">
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <span class="project-card__dot"></span>
+                <div class="project-card__screen">
+                  <div class="mock-line" style="width:50%"></div>
+                  <div class="mock-block" style="height:30px"></div>
+                  <div class="mock-line" style="width:75%"></div>
+                  <div class="mock-line" style="width:60%"></div>
+                  <div class="mock-block" style="height:20px"></div>
+                </div>
+              </div>
+            </div>
+            <h3 class="project-card__title">Portfolio Website</h3>
+            <p class="project-card__desc">Личный сайт-портфолио с 3D-элементами, плавными анимациями и адаптивным дизайном.</p>
+            <div class="project-card__tags">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+            </div>
+            <div class="project-card__footer">
+              <a href="#" class="project-card__link">Live Demo →</a>
+              <a href="#" class="project-card__link">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificates tab -->
+      <div class="tab-content" id="tab-certificates">
+        <div class="certs-grid">
+          <div class="cert-card reveal">
+            <div class="cert-card__icon">📜</div>
+            <h3>Meta Frontend Developer</h3>
+            <p>Meta (Coursera)</p>
+            <span class="cert-card__date">2024</span>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-card__icon">📜</div>
+            <h3>JavaScript Algorithms</h3>
+            <p>freeCodeCamp</p>
+            <span class="cert-card__date">2024</span>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-card__icon">📜</div>
+            <h3>Fullstack Open</h3>
+            <p>University of Helsinki</p>
+            <span class="cert-card__date">2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack tab -->
+      <div class="tab-content" id="tab-stack">
+        <div class="stack-grid">
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">⚛️</div>
+            <span>React</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">▲</div>
+            <span>Next.js</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🟦</div>
+            <span>TypeScript</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🟢</div>
+            <span>Node.js</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🍃</div>
+            <span>MongoDB</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🐘</div>
+            <span>PostgreSQL</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🔷</div>
+            <span>Tailwind</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">📦</div>
+            <span>Docker</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🔀</div>
+            <span>Git</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">⚡</div>
+            <span>Vite</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🎨</div>
+            <span>Figma</span>
+          </div>
+          <div class="stack-item reveal">
+            <div class="stack-item__icon">🔥</div>
+            <span>Firebase</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative 3D torus -->
+    <div class="torus" id="torus">
+      <div class="torus__ring"></div>
+      <div class="torus__ring"></div>
+      <div class="torus__ring"></div>
+      <div class="torus__ring"></div>
+      <div class="torus__ring"></div>
+      <div class="torus__ring"></div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─── -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-label reveal">03 / contact</div>
+      <h2 class="section-title section-title--large reveal">Let's work<br/>together</h2>
+      <p class="section-sub reveal">Открыт к предложениям по работе и коллаборациям.</p>
+
+      <div class="contact__grid reveal">
+        <a href="mailto:mark@example.com" class="contact__card">
+          <span class="contact__card-label">Email</span>
+          <span class="contact__card-value">mark@example.com</span>
+        </a>
+        <a href="https://t.me/mark_dev" class="contact__card" target="_blank">
+          <span class="contact__card-label">Telegram</span>
+          <span class="contact__card-value">@mark_dev</span>
+        </a>
+        <a href="https://github.com/mark-dev" class="contact__card" target="_blank">
+          <span class="contact__card-label">GitHub</span>
+          <span class="contact__card-value">github.com/mark-dev</span>
+        </a>
+        <a href="https://linkedin.com/in/mark-dev" class="contact__card" target="_blank">
+          <span class="contact__card-label">LinkedIn</span>
+          <span class="contact__card-value">linkedin.com/in/mark-dev</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span class="footer__copy">© 2025 mark.dev</span>
+      <span class="footer__note">сделано с ♡ и mass amounts of ☕</span>
+    </div>
+  </footer>
+
+  <!-- Corner Cat -->
+  <div class="corner-cat" id="corner-cat">
+    <div class="cat-ears">
+      <span class="cat-ear cat-ear--l"></span>
+      <span class="cat-ear cat-ear--r"></span>
+    </div>
+    <div class="cat-face">
+      <span class="cat-eye" id="cat-eye-l">•</span>
+      <span class="cat-mouth">ω</span>
+      <span class="cat-eye" id="cat-eye-r">•</span>
+    </div>
+    <div class="cat-speech" id="cat-speech">мяу ♡</div>
+  </div>
+
+  <!-- Click Hearts Container -->
+  <div class="hearts-container" id="hearts-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
