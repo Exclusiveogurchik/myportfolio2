@@ -23,3 +23,19 @@ https://creativecommons.org/licenses/by/3.0/
 
 Changes to all included clips: excerpts selected, audio removed, resolution and
 frame rate reduced, and video recompressed for offline mobile playback.
+
+VOLLEYBALL DEMONSTRATIONS
+
+- Volleyball serve — CC BY-SA 4.0
+  https://commons.wikimedia.org/wiki/File:Volleyball_serve.ogv
+- Predicting Volleyball Serve Reception Video 1 — CC BY 4.0
+  https://commons.wikimedia.org/wiki/File:Predicting-Volleyball-Serve-Reception-Video1.ogv
+- Paris Volley - Chaumont - 27 - Bloc — CC0
+  https://commons.wikimedia.org/wiki/File:Paris_Volley_-_Chaumont,_18_February_2014_-_27-_Bloc.webm
+- La Rochette Volley - Laon Volley - 10 — CC0
+  https://commons.wikimedia.org/wiki/File:La_Rochette_Volley_-_Laon_Volley,_14_d%C3%A9cembre_2013_-_10.webm
+
+Changes: audio removed, resolution and frame rate reduced, and video recompressed
+for offline mobile playback. The serve animation and reception research clip are
+used as technique references; the match clips illustrate block, setting, attack,
+and defensive positioning in a real rally.
