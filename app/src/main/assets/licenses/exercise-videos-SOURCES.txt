@@ -1,0 +1,25 @@
+OFFLINE EXERCISE VIDEO SOURCES
+
+The following short clips were resized, muted, trimmed, and compressed for offline
+playback in Volley Coach. The original CDC works are in the public domain and were
+obtained through Wikimedia Commons:
+
+- Muscle Strengthening at Home - Half squat
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Half_squat.webm
+- Muscle Strengthening at Home - Push-ups
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Push-ups.webm
+- Muscle Strengthening at Home - Sit-ups
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Sit-ups.webm
+- Muscle Strengthening at Home - Superman
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Superman.webm
+- Muscle Strengthening at Home - Toe Lift
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Toe_Lift.webm
+- Muscle Strengthening at Home - Overhead Press
+  https://commons.wikimedia.org/wiki/File:Muscle_Strengthening_at_Home_-_Overhead_Press.webm
+
+The leg-raise demonstration is by FitnessScape and licensed CC BY 3.0:
+https://commons.wikimedia.org/wiki/File:Leg_raises_-_exercise_demonstration_video.webm
+https://creativecommons.org/licenses/by/3.0/
+
+Changes to all included clips: excerpts selected, audio removed, resolution and
+frame rate reduced, and video recompressed for offline mobile playback.

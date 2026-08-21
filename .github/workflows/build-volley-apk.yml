@@ -17,6 +17,38 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+      - name: Prepare offline pose model and exercise videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/assets/mediapipe/wasm app/src/main/assets/exercises
+
+          npm pack @mediapipe/tasks-vision@1.0.1 --silent
+          tar -xzf mediapipe-tasks-vision-1.0.1.tgz
+          cp package/vision_bundle.mjs app/src/main/assets/mediapipe/vision_bundle.mjs
+          cp package/wasm/vision_wasm_internal.js app/src/main/assets/mediapipe/wasm/
+          cp package/wasm/vision_wasm_internal.wasm app/src/main/assets/mediapipe/wasm/
+          cp package/wasm/vision_wasm_nosimd_internal.js app/src/main/assets/mediapipe/wasm/
+          cp package/wasm/vision_wasm_nosimd_internal.wasm app/src/main/assets/mediapipe/wasm/
+          curl -L --fail --retry 3 -o app/src/main/assets/mediapipe/pose_landmarker_lite.task \
+            https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task
+
+          mkdir -p /tmp/volley-exercise-source
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/half_squat.webm https://upload.wikimedia.org/wikipedia/commons/a/ae/Muscle_Strengthening_at_Home_-_Half_squat.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/pushups.webm https://upload.wikimedia.org/wikipedia/commons/1/18/Muscle_Strengthening_at_Home_-_Push-ups.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/situps.webm https://upload.wikimedia.org/wikipedia/commons/f/f4/Muscle_Strengthening_at_Home_-_Sit-ups.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/superman.webm https://upload.wikimedia.org/wikipedia/commons/a/a4/Muscle_Strengthening_at_Home_-_Superman.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/toe_lift.webm https://upload.wikimedia.org/wikipedia/commons/9/91/Muscle_Strengthening_at_Home_-_Toe_Lift.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/overhead_press.webm https://upload.wikimedia.org/wikipedia/commons/b/b9/Muscle_Strengthening_at_Home_-_Overhead_Press.webm
+          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/leg_raises.webm https://upload.wikimedia.org/wikipedia/commons/b/bf/Leg_raises_-_exercise_demonstration_video.webm
+
+          ffmpeg -hide_banner -loglevel error -y -ss 18 -t 16 -i /tmp/volley-exercise-source/half_squat.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/half_squat.webm
+          ffmpeg -hide_banner -loglevel error -y -ss 48 -t 16 -i /tmp/volley-exercise-source/pushups.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/pushup.webm
+          ffmpeg -hide_banner -loglevel error -y -ss 18 -t 16 -i /tmp/volley-exercise-source/situps.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/situp.webm
+          ffmpeg -hide_banner -loglevel error -y -ss 12 -t 16 -i /tmp/volley-exercise-source/superman.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/superman.webm
+          ffmpeg -hide_banner -loglevel error -y -ss 7 -t 13 -i /tmp/volley-exercise-source/toe_lift.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/calf_raise.webm
+          ffmpeg -hide_banner -loglevel error -y -ss 8 -t 17 -i /tmp/volley-exercise-source/overhead_press.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/overhead_press.webm
+          ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/leg_raises.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/leg_raises.webm
       - name: Build debug APK
         run: gradle --no-daemon assembleDebug
       - name: Verify APK exists
