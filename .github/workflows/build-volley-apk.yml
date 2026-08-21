@@ -45,10 +45,6 @@ jobs:
           curl -L --fail --retry 3 -o /tmp/volley-exercise-source/toe_lift.webm https://upload.wikimedia.org/wikipedia/commons/9/91/Muscle_Strengthening_at_Home_-_Toe_Lift.webm
           curl -L --fail --retry 3 -o /tmp/volley-exercise-source/overhead_press.webm https://upload.wikimedia.org/wikipedia/commons/b/b9/Muscle_Strengthening_at_Home_-_Overhead_Press.webm
           curl -L --fail --retry 3 -o /tmp/volley-exercise-source/leg_raises.webm https://upload.wikimedia.org/wikipedia/commons/b/bf/Leg_raises_-_exercise_demonstration_video.webm
-          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/volleyball_serve.ogv https://upload.wikimedia.org/wikipedia/commons/c/c1/Volleyball_serve.ogv
-          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/volleyball_reception.ogv https://upload.wikimedia.org/wikipedia/commons/e/e8/Predicting-Volleyball-Serve-Reception-Video1.ogv
-          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/volleyball_block.webm https://upload.wikimedia.org/wikipedia/commons/3/38/Paris_Volley_-_Chaumont%2C_18_February_2014_-_27-_Bloc.webm
-          curl -L --fail --retry 3 -o /tmp/volley-exercise-source/volleyball_rally.webm https://upload.wikimedia.org/wikipedia/commons/6/66/La_Rochette_Volley_-_Laon_Volley%2C_14_d%C3%A9cembre_2013_-_10.webm
 
           ffmpeg -hide_banner -loglevel error -y -ss 18 -t 16 -i /tmp/volley-exercise-source/half_squat.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/half_squat.webm
           ffmpeg -hide_banner -loglevel error -y -ss 48 -t 16 -i /tmp/volley-exercise-source/pushups.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/pushup.webm
@@ -57,10 +53,6 @@ jobs:
           ffmpeg -hide_banner -loglevel error -y -ss 7 -t 13 -i /tmp/volley-exercise-source/toe_lift.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/calf_raise.webm
           ffmpeg -hide_banner -loglevel error -y -ss 8 -t 17 -i /tmp/volley-exercise-source/overhead_press.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/overhead_press.webm
           ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/leg_raises.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 260k -crf 36 -deadline good -cpu-used 4 app/src/main/assets/exercises/leg_raises.webm
-          ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/volleyball_serve.ogv -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 280k -crf 34 -deadline good -cpu-used 4 app/src/main/assets/exercises/volleyball_serve.webm
-          ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/volleyball_reception.ogv -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 280k -crf 34 -deadline good -cpu-used 4 app/src/main/assets/exercises/volleyball_reception.webm
-          ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/volleyball_block.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 280k -crf 34 -deadline good -cpu-used 4 app/src/main/assets/exercises/volleyball_block.webm
-          ffmpeg -hide_banner -loglevel error -y -i /tmp/volley-exercise-source/volleyball_rally.webm -an -vf 'scale=-2:360,fps=15' -c:v libvpx -b:v 280k -crf 34 -deadline good -cpu-used 4 app/src/main/assets/exercises/volleyball_rally.webm
       - name: Build debug APK
         run: gradle --no-daemon assembleDebug
       - name: Verify APK exists
