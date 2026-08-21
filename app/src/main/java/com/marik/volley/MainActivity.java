@@ -2,8 +2,10 @@ package com.marik.volley;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
@@ -12,6 +14,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.JavascriptInterface;
 import android.widget.TextView;
 
 public final class MainActivity extends Activity {
@@ -44,6 +47,7 @@ public final class MainActivity extends Activity {
             settings.setDisplayZoomControls(false);
 
             webView.setWebViewClient(new WebViewClient());
+            webView.addJavascriptInterface(new VideoBridge(), "AndroidBridge");
             webView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onPermissionRequest(final PermissionRequest request) {
@@ -81,6 +85,21 @@ public final class MainActivity extends Activity {
         text.setText("Volley Coach не смог запуститься.\n\n" +
                 error.getClass().getSimpleName() + ": " + error.getMessage());
         setContentView(text);
+    }
+
+    private final class VideoBridge {
+        @JavascriptInterface
+        public void openYoutube(String videoId) {
+            if (videoId == null || !videoId.matches("[A-Za-z0-9_-]{6,20}")) return;
+            runOnUiThread(() -> {
+                Uri uri = Uri.parse("https://www.youtube.com/watch?v=" + videoId);
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                } catch (Throwable ignored) {
+                    android.util.Log.w("VolleyCoach", "No app can open YouTube video");
+                }
+            });
+        }
     }
 
     @Override
