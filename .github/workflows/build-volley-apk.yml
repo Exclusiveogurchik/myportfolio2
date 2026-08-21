@@ -17,6 +17,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+      - name: Install video encoder
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - name: Prepare offline pose model and exercise videos
         shell: bash
         run: |
