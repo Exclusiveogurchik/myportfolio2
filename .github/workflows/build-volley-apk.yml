@@ -30,8 +30,8 @@ jobs:
           cp package/wasm/vision_wasm_internal.wasm app/src/main/assets/mediapipe/wasm/
           cp package/wasm/vision_wasm_nosimd_internal.js app/src/main/assets/mediapipe/wasm/
           cp package/wasm/vision_wasm_nosimd_internal.wasm app/src/main/assets/mediapipe/wasm/
-          curl -L --fail --retry 3 -o app/src/main/assets/mediapipe/pose_landmarker_full.task \
-            https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task
+          curl -L --fail --retry 3 -o app/src/main/assets/mediapipe/pose_landmarker_lite.task \
+            https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task
       - name: Build debug APK
         run: gradle --no-daemon assembleDebug
       - name: Verify APK exists
