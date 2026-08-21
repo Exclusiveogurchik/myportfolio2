@@ -50,4 +50,148 @@ function retakeVideo(){preview.pause();preview.removeAttribute('src');preview.lo
 async function saveRecording(blob,mode,durationMs){try{const db=await openDb(),tx=db.transaction('recordings','readwrite');tx.objectStore('recordings').put({mode,blob,durationMs,date:Date.now(),version:2});await new Promise((ok,no)=>{tx.oncomplete=ok;tx.onerror=no})}catch(e){console.log(e)}}
 async function loadSavedRecording(mode){try{const db=await openDb(),r=db.transaction('recordings').objectStore('recordings').get(mode);r.onsuccess=()=>{const v=r.result;if(!v?.blob){toast('Записей пока нет');return}if(!v.durationMs){toast('Старая запись не поддерживает перемотку · пересними');seekWarning.classList.add('show');return}stopCamera(false);state.mode=mode;state.recordedMode=mode;showRecorded(v.blob,v.durationMs);toast('Последняя запись открыта')}}catch(e){toast('Не удалось открыть запись')}}
 cameraMode('jump',document.querySelector('#camera .chip'));renderJumpResult();
+</script>
+<style>
+.program-intro{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:17px}.program-intro div{border:1px solid #292929;border-radius:15px;padding:13px 7px;text-align:center}.program-intro strong{display:block;font-size:19px}.program-intro small{color:#777;font-size:10px}.week-label{padding:22px 0 6px;color:#777;font-size:11px;font-weight:800;letter-spacing:.08em}.plan-day{grid-template-columns:48px 1fr auto}.plan-day .phase-line{display:block;margin-top:5px;color:#777;font-size:11px}.session-brief{padding-bottom:25px}.session-hero{border:1px solid #333;border-radius:22px;padding:20px;background:linear-gradient(145deg,#181818,#0d0d0d)}.session-hero h1{font-size:30px}.session-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:18px}.session-facts div{border:1px solid #303030;border-radius:15px;padding:12px 5px;text-align:center}.session-facts strong{display:block;font-size:19px}.session-facts small{font-size:10px;color:#777}.phase-block{margin-top:21px}.phase-block h3{font-size:13px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}.brief-exercise{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #222}.brief-exercise .num{color:#666;font-size:12px}.brief-exercise small{color:#777}.brief-exercise .dose{color:#aaa;font-size:11px;text-align:right}.workout-dose{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.workout-dose span{border:1px solid #333;border-radius:999px;padding:7px 10px;color:#aaa;font-size:11px}.set-dots{display:flex;gap:7px;margin:15px 0}.set-dot{width:10px;height:10px;border-radius:50%;background:#292929}.set-dot.done{background:#eee}.rest-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.rest-actions button{border:1px solid #333;border-radius:14px;padding:13px}.load-note{border-left:2px solid #ddd;padding:1px 0 1px 13px;margin:18px 0;color:#aaa;font-size:12px}.workout-section-tag{display:inline-flex;border:1px solid #343434;border-radius:999px;padding:7px 10px;color:#aaa;font-size:11px;margin-top:17px}.rpe-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:14px}.rpe-row button{border:1px solid #333;border-radius:13px;padding:12px 2px;color:#aaa}.rpe-row button:active{background:#eee;color:#080808}.danger-note{font-size:11px;color:#777;margin-top:13px}
+</style>
+<script>
+Object.assign(EXERCISES,{
+  pulseWarm:{title:'Разогрев в движении',stage:'Разминка',type:'time',seconds:180,tags:['endurance'],rest:15,cues:['Лёгкий бег на месте, приставные шаги и захлёсты','Пульс растёт постепенно','Дыши свободно, не спеши']},
+  ankleMobility:{title:'Мобилизация голеностопа',stage:'Разминка',type:'sets',sets:2,reps:10,tags:['jump'],rest:20,cues:['Колено движется к носку, пятка на полу','Работай каждой ногой','Движение плавное, без боли']},
+  hipMobility:{title:'Раскрытие таза в выпаде',stage:'Разминка',type:'sets',sets:2,reps:8,tags:['endurance'],rest:20,cues:['Таз подкручен, поясница нейтральна','Добавь поворот грудной клетки','Не проваливай колено внутрь']},
+  shoulderMobility:{title:'Подготовка плеч',stage:'Разминка',type:'time',seconds:90,tags:['attack','serve'],rest:15,cues:['Круги руками от малых к большим','Лопатки двигаются свободно','Не форсируй амплитуду']},
+  activation:{title:'Активация: ягодицы и корпус',stage:'Активация',type:'sets',sets:2,reps:10,tags:['jump','endurance'],rest:25,cues:['Чередуй ягодичный мост и dead bug','Рёбра не выпячивай','Движение медленное и точное']},
+  snapDown:{title:'Стоп-позиция из стойки',stage:'Приземление',type:'sets',sets:3,reps:5,tags:['jump','technique'],rest:35,cues:['Быстро опустись в спортивную стойку','Стопы полностью на полу','Замри на две секунды']},
+  squatJump:{title:'Прыжок вверх с фиксацией',stage:'Мощность',type:'sets',sets:4,reps:5,tags:['jump','endurance'],rest:60,afterRest:75,cues:['Каждый прыжок отдельный и максимальный','Приземлись тихо на две ноги','Остановись, восстановись, повтори']},
+  approachJump:{title:'Прыжок после разбега',stage:'Мощность',type:'sets',sets:4,reps:4,tags:['jump','attack'],rest:75,afterRest:90,cues:['Последние два шага ускоряются','Руки активно уходят назад и вверх','Качество важнее количества']},
+  blockJump:{title:'Блок-прыжок у стены',stage:'Мощность',type:'sets',sets:4,reps:5,tags:['jump','technique'],rest:60,requires:['Стена'],cues:['Стартуй из стойки блокирующего','Ладони проходят над воображаемой сеткой','Приземляйся там же, где оттолкнулся']},
+  lateralBound:{title:'Боковые прыжки с фиксацией',stage:'Мощность',type:'sets',sets:3,reps:6,tags:['jump','endurance'],rest:50,cues:['Толкайся в сторону, не вверх','Фиксируй баланс на одной ноге','Колено смотрит по линии стопы']},
+  broadJump:{title:'Прыжок в длину и стоп',stage:'Мощность',type:'sets',sets:3,reps:5,tags:['jump'],rest:60,cues:['Мощно отведи руки назад','Приземлись на две ноги','Не делай следующий прыжок без баланса']},
+  splitSquat:{title:'Болгарские или обычные сплит-приседы',stage:'Сила ног',type:'sets',sets:3,reps:10,tags:['jump','endurance'],rest:60,cues:['Передняя стопа полностью на полу','Таз опускается вертикально','Одинаковый объём на обе ноги']},
+  tempoSquat:{title:'Приседания в темпе 3–1–1',stage:'Сила ног',type:'sets',sets:4,reps:10,tags:['jump','endurance'],rest:60,cues:['Три секунды вниз, пауза, подъём','Колени движутся по линии носков','Корпус остаётся собранным']},
+  reverseLunge:{title:'Обратные выпады',stage:'Сила ног',type:'sets',sets:3,reps:10,tags:['jump','endurance'],rest:50,cues:['Шаг назад достаточно длинный','Толкай пол всей передней стопой','Не раскачивай корпус']},
+  singleGlute:{title:'Ягодичный мост на одной ноге',stage:'Задняя цепь',type:'sets',sets:3,reps:10,tags:['jump','endurance'],rest:45,cues:['Таз остаётся ровным','Не переразгибай поясницу','Пауза в верхней точке']},
+  hamWalkout:{title:'Шаги пятками из моста',stage:'Задняя цепь',type:'sets',sets:3,reps:8,tags:['jump','endurance'],rest:50,cues:['Таз не касается пола','Шаги короткие и контролируемые','Чувствуй заднюю поверхность бедра']},
+  calfRaise:{title:'Подъёмы на носки с паузой',stage:'Голеностоп',type:'sets',sets:4,reps:15,tags:['jump','endurance'],rest:40,cues:['Поднимись максимально высоко','Пауза сверху и медленно вниз','Не заваливай стопы наружу']},
+  tibRaise:{title:'Подъёмы носков у стены',stage:'Голеностоп',type:'sets',sets:3,reps:15,tags:['jump','endurance'],rest:35,requires:['Стена'],cues:['Пятки остаются на полу','Подними носки максимально высоко','Контролируй опускание']},
+  pushup:{title:'Отжимания',stage:'Сила верха',type:'sets',sets:4,reps:10,tags:['attack','serve','endurance'],rest:50,cues:['Корпус одной линией','Локти направлены немного назад','Грудь опускается между ладонями']},
+  pikePushup:{title:'Отжимания уголком',stage:'Плечевой пояс',type:'sets',sets:3,reps:8,tags:['attack','serve'],rest:55,cues:['Таз высоко, голова идёт между ладонями','Плечи работают без боли','Упрости, поставив руки выше']},
+  bandPull:{title:'Разведение резинки',stage:'Плечевой пояс',type:'sets',sets:3,reps:15,tags:['attack','serve','technique'],rest:35,requires:['Резинки'],cues:['Плечи не поднимай к ушам','Своди лопатки, а не прогибай поясницу','Возвращай руки медленно']},
+  plank:{title:'Планка с касанием плеч',stage:'Корпус',type:'sets',sets:3,reps:16,tags:['attack','endurance'],rest:40,cues:['Таз почти неподвижен','Стопы можно поставить шире','Не задерживай дыхание']},
+  sidePlank:{title:'Боковая планка',stage:'Корпус',type:'time',seconds:90,tags:['attack','endurance'],rest:35,cues:['45 секунд на каждую сторону','Тело образует прямую линию','Опорное плечо активно']},
+  deadBug:{title:'Dead bug',stage:'Корпус',type:'sets',sets:3,reps:10,tags:['technique','endurance'],rest:35,cues:['Поясница мягко прижата к полу','Двигай противоположные руку и ногу','Выдох на разгибании']},
+  fastFeet:{title:'Быстрые стопы',stage:'Скорость',type:'sets',sets:6,reps:'15 сек',tags:['endurance','technique'],rest:30,cues:['Короткие быстрые касания','Корпус в игровой стойке','Каждый интервал выполняй резко']},
+  lateralShuffle:{title:'Приставные шаги',stage:'Перемещения',type:'sets',sets:5,reps:'20 сек',tags:['receive','endurance','technique'],rest:35,cues:['Стопы не скрещиваются','Таз остаётся низко','Касайся линии и меняй направление']},
+  shuttle:{title:'Челночный бег 5–10–5',stage:'Кондиция',type:'sets',sets:5,reps:'1 отрезок',tags:['endurance'],rest:55,cues:['Касайся линии внешней рукой','Разгоняйся за первые два шага','Тормози низко, не на прямых ногах']},
+  mountain:{title:'Альпинист',stage:'Кондиция',type:'sets',sets:4,reps:'30 сек',tags:['endurance'],rest:35,cues:['Плечи над ладонями','Колени идут вперёд быстро','Таз не прыгает вверх-вниз']},
+  burpeeStep:{title:'Бёрпи без прыжка',stage:'Кондиция',type:'sets',sets:4,reps:8,tags:['endurance'],rest:45,cues:['Шагай в упор и обратно','Сохраняй контроль корпуса','Ускоряйся только при чистой технике']},
+  settingWall:{title:'Передача сверху у стены',stage:'Техника',type:'sets',sets:5,reps:30,video:'hsTAXPYw2e8',requires:['Мяч','Стена'],tags:['technique'],rest:35,cues:['Контакт над лбом','Пальцы мягко встречают мяч','Держи одинаковую точку попадания']},
+  receiveWall:{title:'Серии приёма у стены',stage:'Техника',type:'sets',sets:5,reps:25,video:'hsTAXPYw2e8',requires:['Мяч','Стена'],tags:['receive','technique'],rest:40,cues:['Платформа стабильна','Под мяч выходят ноги','Считай только точные повторы']},
+  serveTargets:{title:'Подача по зонам',stage:'Техника',type:'sets',sets:6,reps:6,video:'NRV0rMeSOBI',requires:['Мяч'],tags:['serve','technique'],rest:40,cues:['Выбери конкретную зону до подброса','Одинаковый ритуал перед каждой подачей','Записывай попадания, а не только попытки']},
+  tossControl:{title:'Стабильный подброс',stage:'Техника',type:'sets',sets:4,reps:12,requires:['Мяч'],tags:['serve','technique'],rest:30,cues:['Мяч поднимается впереди ударного плеча','Лови его, не выполняя удар','Подбросы должны попадать в одну точку']},
+  blockFootwork:{title:'Шаги блока вдоль сетки',stage:'Техника',type:'sets',sets:5,reps:6,requires:['Сетка'],tags:['jump','technique'],rest:45,cues:['Сначала без прыжка: приставной или скрестный шаг','Остановись квадратом к сетке','После освоения добавь контролируемый прыжок']},
+  defenseSprawl:{title:'Выход в защиту и подъём',stage:'Защита',type:'sets',sets:4,reps:6,tags:['receive','endurance','technique'],rest:45,cues:['Сначала сместись, затем опустись','Не падай на колени','Поднимайся сразу в игровую стойку']},
+  attackLine:{title:'Разбег, замах, удар по мячу',stage:'Техника',type:'sets',sets:5,reps:6,video:'B7vbjJ2wQQQ',requires:['Мяч'],tags:['attack','technique'],rest:55,cues:['Свяжи последние два шага и замах','Контакт впереди ударного плеча','После удара контролируй приземление']},
+  shadowFull:{title:'Полная теневая атака',stage:'Техника',type:'sets',sets:5,reps:8,video:'u-WhjYYocBs',tags:['attack','technique'],rest:40,cues:['Разбег, замах и приземление — одно движение','Первые повторы на 60% скорости','Последние повторы быстрые, но чистые']},
+  reactionLine:{title:'Реакция на направление',stage:'Защита',type:'sets',sets:6,reps:'20 сек',tags:['receive','endurance'],rest:35,cues:['Выбери случайный сигнал или таймер','Первый шаг короткий и взрывной','После касания вернись в центр']},
+  cooldownWalk:{title:'Спокойная ходьба и дыхание',stage:'Заминка',type:'time',seconds:120,tags:['recovery'],rest:10,cues:['Снизь пульс постепенно','Вдох носом, длинный выдох','Не садись сразу после интервалов']},
+  cooldownMobility:{title:'Заминка всего тела',stage:'Заминка',type:'time',seconds:240,tags:['recovery'],rest:0,cues:['Икры, квадрицепс, задняя поверхность бедра','Грудные мышцы и плечи','Только комфортное натяжение, без боли']}
+});
+
+const PROGRAM_PHASES={
+  prep:['pulseWarm','ankleMobility','hipMobility','shoulderMobility','activation'],
+  power:['snapDown','pogo','squatJump','approachJump','lateralBound','broadJump','blockJump'],
+  strength:['tempoSquat','splitSquat','reverseLunge','singleGlute','hamWalkout','calfRaise','tibRaise','pushup','pikePushup','bandPull','plank','sidePlank','deadBug'],
+  conditioning:['fastFeet','lateralShuffle','shuttle','mountain','burpeeStep','reactionLine'],
+  cooldown:['cooldownWalk','cooldownMobility']
+};
+const GOAL_SKILLS={
+  'Выше прыгать':['approach','landing','approachJump','snapDown','blockFootwork'],
+  'Сильнее атаковать':['armswing','shadowFull','attackLine','approach'],
+  'Лучше принимать':['receiveWall','wallpass','lateralShuffle','defenseSprawl','reactionLine'],
+  'Стабильная подача':['tossControl','serve','serveTargets','shoulderMobility']
+};
+const POSITION_SKILLS={
+  'Либеро':['receiveWall','defenseSprawl','reactionLine','lateralShuffle'],
+  'Связующий':['settingWall','fastFeet','shoulderMobility','plank'],
+  'Центральный блокирующий':['blockFootwork','blockJump','lateralShuffle','snapDown'],
+  'Доигровщик':['attackLine','receiveWall','approachJump','serveTargets'],
+  'Диагональный':['attackLine','approachJump','blockFootwork','serveTargets'],
+  'Пока не знаю':['settingWall','shadowFull','lateralShuffle','tossControl']
+};
+const SESSION_TYPES=[
+  {name:'Мощность и техника',impact:'Высокая',parts:['power','skill','strength','core']},
+  {name:'Сила всего тела',impact:'Средняя',parts:['strength','skill','conditioning']},
+  {name:'Скорость и игровая работа',impact:'Средняя',parts:['skill','conditioning','strength']},
+  {name:'Техника и восстановление',impact:'Низкая',parts:['skill','core']},
+  {name:'Матчевая физика',impact:'Высокая',parts:['power','skill','conditioning']}
+];
+
+function availableExercise(id,p){const e=EXERCISES[id];return !!e&&(e.requires||[]).every(x=>p.equipment.includes(x))}
+function rotated(a,n){if(!a.length)return[];n%=a.length;return a.slice(n).concat(a.slice(0,n))}
+function uniqueAvailable(ids,p){return [...new Set(ids)].filter(id=>availableExercise(id,p))}
+function sessionExerciseIds(p,typeIndex,week,dayIndex){
+  const type=SESSION_TYPES[typeIndex],rotation=week*3+dayIndex,goal=GOAL_SKILLS[p.goal]||GOAL_SKILLS['Выше прыгать'],position=POSITION_SKILLS[p.position]||POSITION_SKILLS['Пока не знаю'];
+  const prep=rotated(PROGRAM_PHASES.prep,rotation).slice(0,p.duration<=20?2:4);
+  const power=type.parts.includes('power')?rotated(PROGRAM_PHASES.power,rotation).slice(0,p.duration<=35?2:3):[];
+  const skill=rotated(uniqueAvailable([...goal,...position],p),rotation).slice(0,p.duration<=20?2:3);
+  const strength=type.parts.includes('strength')?rotated(uniqueAvailable(PROGRAM_PHASES.strength,p),rotation*2).slice(0,p.duration<=35?2:4):rotated(['deadBug','plank','sidePlank'],rotation).slice(0,1);
+  const conditioning=type.parts.includes('conditioning')?rotated(PROGRAM_PHASES.conditioning,rotation).slice(0,p.duration<=35?1:2):[];
+  let ids=uniqueAvailable([...prep,...power,...skill,...strength,...conditioning,...PROGRAM_PHASES.cooldown],p);
+  const cap=p.duration<=20?7:p.duration<=35?10:p.duration<=50?13:p.duration<=70?16:18;
+  if(ids.length>cap){const cool=ids.filter(x=>PROGRAM_PHASES.cooldown.includes(x)),body=ids.filter(x=>!PROGRAM_PHASES.cooldown.includes(x)).slice(0,Math.max(1,cap-cool.length));ids=[...body,...cool]}
+  return ids;
+}
+function generatePlan(p){
+  const slots={2:[1,4],3:[1,3,5],4:[1,2,4,6],5:[1,2,3,5,6]}[p.days]||[1,3,5],today=new Date(),monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));monday.setHours(12,0,0,0);const plan=[];
+  for(let week=0;week<4;week++)slots.forEach((off,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+week*7+off-1);const typeIndex=p.days>=4&&i===3?3:i%3;const type=SESSION_TYPES[typeIndex];plan.push({id:`program-v4-${week}-${i}-${p.goal}-${p.duration}`,date:d.toISOString().slice(0,10),day:DAY_NAMES[d.getDay()],week:week+1,title:type.name,impact:type.impact,minutes:Number(p.duration),exerciseIds:sessionExerciseIds(p,typeIndex,week,i)})});
+  return plan;
+}
+function exerciseFor(id,item){
+  const base=EXERCISES[id],level=state.profile?.level||'Начинающий',week=item?.week||1,levelFactor={'Начинающий':.82,'Средний':1,'Продвинутый':1.15}[level]||1,weekFactor=[1,1.08,1.15,.8][Math.min(3,week-1)],e={...base};
+  if(e.type==='sets'){
+    e.sets=Math.max(2,Math.round((base.sets||3)*(level==='Продвинутый'?1.12:level==='Начинающий'?.88:1)*weekFactor));
+    if(typeof base.reps==='number')e.reps=Math.max(4,Math.round(base.reps*levelFactor*(week===4?.9:1)));
+    if((e.tags||[]).includes('jump'))e.reps=Math.min(e.reps,8);
+  }else e.seconds=Math.max(30,Math.round((base.seconds||60)*levelFactor*(week===4?.85:1)));
+  e.rest=base.rest||((e.tags||[]).includes('jump')?60:40);e.afterRest=base.afterRest||Math.max(30,e.rest);return e;
+}
+function exerciseDose(e){return e.type==='time'?clock(e.seconds):`${e.sets} × ${e.reps}`}
+function phaseName(stage){if(['Разминка','Активация'].includes(stage))return'1 · Подготовка';if(['Мощность','Приземление','Прыжок','Прыжковая сила'].includes(stage))return'2 · Прыжок и мощность';if(['Сила ног','Задняя цепь','Голеностоп','Сила верха','Плечевой пояс','Корпус'].includes(stage))return'3 · Сила';if(['Техника','Атака','Подача','Приём','Защита','Перемещения','Скорость','Координация','Контроль'].includes(stage))return'4 · Волейбол';if(stage==='Кондиция')return'5 · Кондиция';return'6 · Заминка'}
+function estimateSession(item){return item.minutes||Math.max(20,Math.round(item.exerciseIds.reduce((sum,id)=>{const e=exerciseFor(id,item);return sum+(e.type==='time'?e.seconds:e.sets*(typeof e.reps==='number'?e.reps*3:30)+(e.sets-1)*e.rest)+e.afterRest},0)/60))}
+function workoutTitle(g,i){return SESSION_TYPES[i%SESSION_TYPES.length].name}
+
+function renderHome(){const next=state.plan.find(x=>!state.progress.completedPlans[x.id])||state.plan[0];homePlanTitle.textContent=next.title;homePlanMeta.textContent=`${estimateSession(next)} минут · ${next.exerciseIds.length} упражнений · нагрузка ${next.impact.toLowerCase()}`;homeWorkoutBtn.textContent='Открыть тренировку';homeWorkoutBtn.onclick=()=>startWorkout(state.plan.indexOf(next));summaryWorkouts.textContent=state.progress.workouts;summaryJump.textContent=state.progress.jumpBest?state.progress.jumpBest.toFixed(1)+' см':'—';summaryRating.textContent=calculateStats().overall}
+function renderPlan(){
+  document.querySelector('#plan h1').textContent='Программа на 4 недели';planGoal.textContent=state.profile.goal;planProfileText.textContent=`${state.profile.level} · ${state.profile.days} раза в неделю · ${state.profile.duration} минут`;
+  planList.innerHTML=`<div class="program-intro"><div><strong>${state.plan.length}</strong><small>тренировок</small></div><div><strong>4</strong><small>недели</small></div><div><strong>${state.profile.duration}</strong><small>минут</small></div></div>`+state.plan.map((x,i)=>`${i===0||state.plan[i-1].week!==x.week?`<div class="week-label">НЕДЕЛЯ ${x.week}${x.week===4?' · РАЗГРУЗОЧНАЯ':''}</div>`:''}<button class="plan-day" onclick="startWorkout(${i})"><div class="plan-date">${x.day}</div><div style="text-align:left"><h3>${x.title}</h3><small>${x.exerciseIds.length} упражнений · ${estimateSession(x)} мин</small><span class="phase-line">Нагрузка: ${x.impact.toLowerCase()}</span></div><span class="tag">${state.progress.completedPlans[x.id]?'ГОТОВО':'ОТКРЫТЬ'}</span></button>`).join('')
+}
+
+function startWorkout(i){const item=state.plan[i]||state.plan[0];state.workout={item,index:0,completed:new Set(),seconds:0,setsDone:0,running:false,rest:false,restKind:null,timer:null,activeIndex:-1,startedAt:null,finished:false,preview:true};workoutOverlay.classList.add('open');workoutHeaderTitle.textContent=item.title;renderWorkoutBrief()}
+function renderWorkoutBrief(){
+  const w=state.workout,item=w.item,groups={};item.exerciseIds.forEach(id=>{const e=exerciseFor(id,item),phase=phaseName(e.stage);(groups[phase]||(groups[phase]=[])).push([id,e])});workoutCount.textContent=`Неделя ${item.week} · обзор`;workoutPhase.textContent=item.impact.toUpperCase();workoutProgress.style.width='0%';
+  workoutStage.innerHTML=`<div class="session-brief"><div class="session-hero"><div class="eyebrow">Персональная тренировка</div><h1>${item.title}</h1><p>${state.profile.position} · цель: ${state.profile.goal}</p><div class="session-facts"><div><strong>${estimateSession(item)}</strong><small>минут</small></div><div><strong>${item.exerciseIds.length}</strong><small>упражнений</small></div><div><strong>${item.impact}</strong><small>нагрузка</small></div></div></div><div class="load-note">Неделя ${item.week}: ${item.week===4?'сниженный объём для восстановления':'объём адаптирован под уровень «'+state.profile.level+'»'}.</div>${Object.entries(groups).map(([phase,list])=>`<div class="phase-block"><h3>${phase}</h3>${list.map(([id,e],n)=>`<div class="brief-exercise"><span class="num">${n+1}</span><div><strong>${e.title}</strong><small>${e.stage}</small></div><span class="dose">${exerciseDose(e)}</span></div>`).join('')}</div>`).join('')}<p class="danger-note">Не тренируйся через острую боль, головокружение или ухудшение самочувствия.</p><button class="primary" onclick="beginWorkout()">Начать тренировку</button><button class="secondary center" onclick="closeWorkout()">Вернуться к плану</button></div>`
+}
+function beginWorkout(){const w=state.workout;w.preview=false;w.startedAt=Date.now();w.index=0;w.activeIndex=-1;renderWorkout()}
+function ensureEx(){const w=state.workout,e=exerciseFor(w.item.exerciseIds[w.index],w.item);if(w.activeIndex!==w.index){w.activeIndex=w.index;w.seconds=e.seconds||0;w.setsDone=0;w.running=false}}
+function renderWorkout(){
+  const w=state.workout;if(!w||w.finished)return;if(w.preview){renderWorkoutBrief();return}ensureEx();const id=w.item.exerciseIds[w.index],e=exerciseFor(id,w.item),total=w.item.exerciseIds.length;workoutCount.textContent=`${w.index+1} из ${total}`;workoutPhase.textContent=w.rest?'ОТДЫХ':e.stage.toUpperCase();workoutProgress.style.width=((w.index+(w.completed.has(w.index)?1:0))/total*100)+'%';if(w.rest){renderRest();return}const metric=e.type==='time'?clock(w.seconds):`${w.setsDone} / ${e.sets}`;
+  workoutStage.innerHTML=`${e.video?`<div class="workout-media"><img src="videos/${e.video}.jpg"><button class="video-button" onclick="openExerciseVideo()">Показать технику</button></div>`:''}<span class="workout-section-tag">${phaseName(e.stage)}</span><h1 class="workout-title">${e.title}</h1><div class="workout-dose"><span>${exerciseDose(e)}</span><span>отдых ${e.rest} сек</span><span>неделя ${w.item.week}</span></div><div class="workout-metric" id="workoutMetric">${metric}</div>${e.type==='sets'?`<div class="set-dots">${Array.from({length:e.sets},(_,i)=>`<i class="set-dot ${i<w.setsDone?'done':''}"></i>`).join('')}</div>`:''}<ul class="cue-list">${e.cues.map(x=>`<li>${x}</li>`).join('')}</ul><p class="safety">Качество повторений важнее скорости. Остановись при острой боли.</p><button class="primary" id="exerciseAction" onclick="exerciseAction()">${actionLabel()}</button><div class="workout-nav"><button onclick="previousExercise()">Назад</button><button onclick="skipExercise()">Пропустить</button></div>`
+}
+function actionLabel(){const w=state.workout,e=exerciseFor(w.item.exerciseIds[w.index],w.item);return e.type==='sets'?(w.setsDone?`Подход ${w.setsDone+1} выполнен`:'Подход выполнен'):(w.running?'Пауза':w.seconds<e.seconds?'Продолжить':'Начать таймер')}
+function exerciseAction(){const w=state.workout,e=exerciseFor(w.item.exerciseIds[w.index],w.item),btn=document.getElementById('exerciseAction');if(e.type==='sets'){w.setsDone++;updateMetric();if(w.setsDone>=e.sets)completeExercise();else startRest(e.rest,'set')}else{w.running?pauseTimer():startTimer();if(btn)btn.textContent=actionLabel()}}
+function updateMetric(){const w=state.workout,e=exerciseFor(w.item.exerciseIds[w.index],w.item),el=document.getElementById('workoutMetric');if(el)el.textContent=e.type==='time'?clock(w.seconds):`${w.setsDone} / ${e.sets}`}
+function completeExercise(){const w=state.workout,id=w.item.exerciseIds[w.index],e=exerciseFor(id,w.item);pauseTimer();w.completed.add(w.index);state.progress.exerciseCounts[id]=(state.progress.exerciseCounts[id]||0)+1;if(w.index===w.item.exerciseIds.length-1)finishWorkout();else startRest(e.afterRest,'exercise')}
+function startRest(seconds=40,kind='exercise'){const w=state.workout;pauseTimer();w.rest=true;w.restKind=kind;w.seconds=seconds;renderWorkout();w.running=true;w.timer=setInterval(()=>{w.seconds--;const el=document.getElementById('restTime');if(el)el.textContent=clock(w.seconds);if(w.seconds<=0)nextAfterRest()},1000)}
+function renderRest(){const w=state.workout,same=w.restKind==='set',n=exerciseFor(w.item.exerciseIds[same?w.index:w.index+1],w.item);workoutStage.innerHTML=`<div class="rest-card"><div class="eyebrow">${same?'Между подходами':'Упражнение выполнено'}</div><h1>Отдых</h1><div class="rest-ring"><div class="rest-time" id="restTime">${clock(w.seconds)}</div></div><p>${same?`Дальше: подход ${w.setsDone+1} из ${n.sets}`:`Дальше: ${n.title}`}</p><div class="rest-actions"><button onclick="addRest(15)">+15 секунд</button><button onclick="nextAfterRest()">Продолжить</button></div></div>`}
+function addRest(s){const w=state.workout;w.seconds+=s;const el=document.getElementById('restTime');if(el)el.textContent=clock(w.seconds)}
+function nextAfterRest(){const w=state.workout,kind=w.restKind;pauseTimer();w.rest=false;w.restKind=null;if(kind==='exercise'){w.index++;w.activeIndex=-1}renderWorkout()}
+function previousExercise(){const w=state.workout;pauseTimer();if(w.rest){w.rest=false;w.restKind=null}if(!w.index){toast('Это первое упражнение');renderWorkout();return}w.index--;w.activeIndex=-1;renderWorkout()}
+function skipExercise(){const w=state.workout;pauseTimer();w.rest=false;w.restKind=null;if(w.index===w.item.exerciseIds.length-1)finishWorkout();else{w.index++;w.activeIndex=-1;renderWorkout();toast('Упражнение пропущено')}}
+function finishWorkout(){const w=state.workout;pauseTimer();w.finished=true;const mins=Math.max(1,Math.round(((w.startedAt?Date.now()-w.startedAt:0))/60000)),done=w.completed.size,total=w.item.exerciseIds.length,qualified=done>=Math.ceil(total*.6);if(qualified){state.progress.workouts++;state.progress.minutes+=mins;state.progress.completedPlans[w.item.id]=Date.now()}saveProgress();workoutCount.textContent='Готово';workoutPhase.textContent=qualified?'ЗАВЕРШЕНО':'ЧАСТИЧНО';workoutProgress.style.width=(done/total*100)+'%';workoutStage.innerHTML=`<div class="finish-card"><div class="eyebrow">${qualified?'Результат сохранён':'Нужно выполнить не меньше 60%'}</div><h1>${qualified?'Тренировка завершена':'Сессия не засчитана'}</h1><div class="finish-score">${done}/${total}</div><p>выполнено упражнений</p><div class="finish-stats"><div class="finish-stat"><strong>${mins}</strong><small>минут</small></div><div class="finish-stat"><strong>${qualified?'+'+done*40:'0'}</strong><small>XP</small></div></div>${qualified?`<div class="eyebrow">Насколько тяжело было?</div><div class="rpe-row">${[1,2,3,4,5].map(x=>`<button onclick="saveRpe(${x})">${x}</button>`).join('')}</div>`:''}<button class="primary" onclick="endWorkout()">На главную</button></div>`}
+function saveRpe(value){state.progress.lastRpe=value;saveProgress();toast(`Нагрузка ${value}/5 сохранена`)}
+function openExerciseVideo(){const e=exerciseFor(state.workout.item.exerciseIds[state.workout.index],state.workout.item);pauseTimer();videoTitle.textContent=e.title;videoFrame.src='https://www.youtube-nocookie.com/embed/'+e.video+'?playsinline=1&rel=0';videoModal.classList.add('open')}
+
+const durationSelect=document.getElementById('durationInput');if(durationSelect){durationSelect.innerHTML='<option value="20">20 минут · короткая</option><option value="35">35 минут</option><option value="50" selected>50 минут · полная</option><option value="70">70 минут · расширенная</option><option value="90">90 минут · максимальная</option>';if(state.profile?.duration)durationSelect.value=String(state.profile.duration)}
+if(state.profile){state.plan=generatePlan(state.profile);renderAll()}
 </script></body></html>
