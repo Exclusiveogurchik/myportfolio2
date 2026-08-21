@@ -29,7 +29,7 @@ jobs:
 
           npm pack @mediapipe/tasks-vision@1.0.1 --silent
           tar -xzf mediapipe-tasks-vision-1.0.1.tgz
-          cp package/vision_bundle.mjs app/src/main/assets/mediapipe/vision_bundle.mjs
+          cp package/vision_bundle.js app/src/main/assets/mediapipe/vision_bundle.js
           cp package/wasm/vision_wasm_internal.js app/src/main/assets/mediapipe/wasm/
           cp package/wasm/vision_wasm_internal.wasm app/src/main/assets/mediapipe/wasm/
           cp package/wasm/vision_wasm_nosimd_internal.js app/src/main/assets/mediapipe/wasm/
