@@ -17,6 +17,8 @@ import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
 import android.widget.TextView;
 
+import androidx.webkit.WebViewAssetLoader;
+
 public final class MainActivity extends Activity {
     private WebView webView;
 
@@ -46,7 +48,16 @@ public final class MainActivity extends Activity {
             settings.setBuiltInZoomControls(false);
             settings.setDisplayZoomControls(false);
 
-            webView.setWebViewClient(new WebViewClient());
+            final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+                    .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                    .build();
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public android.webkit.WebResourceResponse shouldInterceptRequest(
+                        WebView view, android.webkit.WebResourceRequest request) {
+                    return assetLoader.shouldInterceptRequest(request.getUrl());
+                }
+            });
             webView.addJavascriptInterface(new VideoBridge(), "AndroidBridge");
             webView.setWebChromeClient(new WebChromeClient() {
                 @Override
@@ -69,7 +80,7 @@ public final class MainActivity extends Activity {
                 }
             });
             setContentView(webView);
-            webView.loadUrl("file:///android_asset/index.html");
+            webView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
         } catch (Throwable error) {
             showFatalError(error);
         }

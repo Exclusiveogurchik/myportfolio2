@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
 }
 
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
+
 android {
     namespace 'com.marik.volley'
     compileSdk 35
@@ -10,8 +14,8 @@ android {
         applicationId 'com.marik.volley'
         minSdk 26
         targetSdk 35
-        versionCode 5
-        versionName '0.5.0'
+        versionCode 6
+        versionName '0.6.0'
     }
 
     buildTypes {
